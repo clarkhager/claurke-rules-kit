@@ -70,6 +70,21 @@ fi
 
 mkdir -p "$TARGET_DIR"
 
+# --- Collision check: claurke-memory-kit (project mode only) ---
+if [ "$MODE" = "project" ] && [ -f "$TARGET_DIR/.claude-memory-kit" ]; then
+  echo ""
+  print_warn "claurke-memory-kit appears to be installed in $TARGET_DIR"
+  print_warn "Both kits install CLAUDE.md at the same path. They will conflict."
+  print_warn "Recommended setup: rules-kit at the global level (--global), memory-kit per-project."
+  print_warn "See https://github.com/clarkhager/claurke-memory-kit#working-with-claurke-rules-kit"
+  echo ""
+  read -rp "Continue with rules-kit install in this folder anyway? [y/N]: " CONTINUE
+  if [[ ! "${CONTINUE:-N}" =~ ^[Yy]$ ]]; then
+    echo "Aborted."
+    exit 0
+  fi
+fi
+
 RULE_FILES=(
   "CLAUDE.md"
   "claude_voice_rules.md"

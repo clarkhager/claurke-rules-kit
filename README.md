@@ -1,8 +1,8 @@
 # claurke-rules-kit
 
-A deployable behavioral rules system for Claude. One command installs a tested CLAUDE.md (anti-sycophancy, sparring-partner framing, plan-before-coding, diagnostic mode, response-shape rules) globally or per-project.
+A deployable behavioral rules system for Claude. Designed for a hybrid Cowork + Claude Code workflow: install at the global level so universal behavioral rules apply across both products. One command installs a tested CLAUDE.md (anti-sycophancy, sparring-partner framing, plan-before-coding, diagnostic mode, response-shape rules) globally or per-project.
 
-Built and validated through iterative rewrites against Anthropic official guidance, current sycophancy research, and community CLAUDE.md best practices. Companion to [claurke-memory-kit](https://github.com/clarkhager/claurke-memory-kit), which handles project-level memory; this handles universal behavior.
+Built and validated through iterative rewrites against Anthropic official guidance, current sycophancy research, and community CLAUDE.md best practices. Companion to [claurke-memory-kit](https://github.com/clarkhager/claurke-memory-kit), which handles project-level memory; this handles universal behavior. See "Working with claurke-memory-kit" below for the joint setup.
 
 ---
 
@@ -25,7 +25,7 @@ The deploy script (`deploy.sh`) auto-checks for humanizer at standard paths and 
 
 ```bash
 gh repo clone clarkhager/claurke-rules-kit ~/.claude/rules-kit
-bash ~/.claude/rules-kit/deploy.sh
+bash ~/.claude/rules-kit/deploy.sh --global
 ```
 
 ### Deploy globally (all Cowork / Claude Code sessions)
@@ -90,6 +90,38 @@ Key components:
 - **Hooks don't fire reliably in Cowork** (anthropics/claude-code issues #27398 and #40495). Hooks would be the right mechanism for guaranteed re-injection of spine rules; until those bugs close, treat self-checkpoint prompts as soft reminders.
 - **Persona drift** degrades self-consistency by 30%+ after 8-12 turns per arxiv 2402.10962. Long sessions weaken the sparring-partner framing regardless of how well the rules are written.
 - **Humanizer skill is a dependency.** If it's not installed (see Prerequisites), the voice-rule pass silently won't run. The rest of the kit still works.
+
+---
+
+## Working with claurke-memory-kit
+
+This kit handles **universal behavioral rules** (anti-sycophancy, sparring-partner framing, response-shape, diagnostic mode). It pairs with [claurke-memory-kit](https://github.com/clarkhager/claurke-memory-kit), which handles **per-project memory** (project context, decisions log, live state).
+
+Designed for a hybrid Cowork + Claude Code workflow.
+
+**Recommended setup:**
+
+```bash
+# 1. Install this kit at the global level (universal behavioral rules)
+gh repo clone clarkhager/claurke-rules-kit ~/.claude/rules-kit
+bash ~/.claude/rules-kit/deploy.sh --global
+
+# 2. Install memory-kit per-project as needed (project context)
+gh repo clone clarkhager/claurke-memory-kit ~/.claude/memory-kit
+bash ~/.claude/memory-kit/deploy.sh
+```
+
+What you get:
+
+- **Rules-kit's universal behavioral rules** load every session.
+  - Claude Code: via `~/.claude/CLAUDE.md` automatically
+  - Cowork: paste contents of `~/.claude/CLAUDE.md` into Settings > Global Instructions once
+- **Memory-kit's project context** loads when working in a specific project folder.
+  - Claude Code and Cowork both load it via the project's `CLAUDE.md`
+
+Both CLAUDE.md files concatenate cleanly in context per Anthropic's [memory documentation](https://code.claude.com/docs/en/memory). Global rules apply first, project context applies last. No collision when deployed at different scopes.
+
+**Do not install both kits' CLAUDE.md in the same folder.** They will conflict (one will silently skip or overwrite the other). Both deploy scripts warn about this case. Use rules-kit at the global level (`--global`) and memory-kit at the project level only.
 
 ---
 
