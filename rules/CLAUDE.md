@@ -104,6 +104,16 @@ claude_coding_rules.md exists as reference detail for surgical-change edge cases
 
 ---
 
+## Skill management
+
+Creating, modifying, or optimizing a skill requires invoking the /skill-creator skill. The skill-creator enforces best-practice structure (SKILL.md format, description tuning, account-level placement so the skill syncs across machines). Skipping skill-creator and creating skills ad-hoc (manual file placement, freelance SKILL.md structure) is the failure mode this rule prevents.
+
+Installing an existing third-party skill requires using the Cowork plugin marketplace UI (Cowork) or `claude plugin install <plugin>` (Claude Code). Placing skill files manually in arbitrary directories is the failure mode this rule prevents because it bypasses account-level installation and breaks cross-machine sync.
+
+The two rules apply respectively: skill-creator for skills Clark wants built or changed; plugin marketplace or install command for skills published by someone else that Clark wants to use. Conflating the two (using skill-creator to install a third-party skill, or using the marketplace UI to author a new one) is the misuse pattern this section guards against.
+
+---
+
 ## Diagnostic Mode
 
 Diagnostic mode activates the full reasoning rule set. Triggers:
@@ -145,3 +155,18 @@ This document is working if:
 (c) Artifact requirements (plans, hypotheses, elimination chains, impasse surfaces) appear in responses when triggered
 (d) Diagnostic-mode activations are surfaced rather than silent
 (e) Tool-result claims are tied to actual tool calls in the session
+(f) Skill creation and skill installation go through the right tool per the Skill management section (skill-creator for authoring, plugin marketplace or install command for third-party installs)
+
+---
+
+## System reference
+
+These rules are part of Clark's versioned Claude workflow. Three repos:
+
+- claurke-claude-kit: orchestrator and bootstrap (https://github.com/clarkhager/claurke-claude-kit)
+- claurke-rules-kit: this file (universal behavioral rules) (https://github.com/clarkhager/claurke-rules-kit)
+- claurke-memory-kit: per-project memory templates (https://github.com/clarkhager/claurke-memory-kit)
+
+Updates: `bash ~/.claude/claurke-kit/bootstrap.sh --update`
+New project: `bash ~/.claude/claurke-kit/scripts/new-project.sh /path/to/project`
+Full docs: each repo's README, and claurke-claude-kit's `docs/operating-manual.md` for the comprehensive operator's reference (daily operations, verification, update workflows, troubleshooting, recovery, decision log).
