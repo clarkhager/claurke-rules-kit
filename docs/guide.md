@@ -11,6 +11,16 @@ A tested CLAUDE.md plus four side documents. The rules target two failure modes 
 
 The design is the result of iterative rewrites against three rounds of research: Anthropic's official guidance, current sycophancy literature, and community best practices.
 
+## Prerequisites
+
+The Voice section requires the **humanizer skill** to be installed. The deploy script auto-checks for it at standard paths and warns if missing.
+
+Install paths:
+- Cowork: Settings > Plugins > Anthropic Skills bundle
+- Claude Code: `claude plugin install anthropic-skills` or place at `~/.claude/skills/humanizer/`
+
+If humanizer isn't installed, the voice-rule pass silently won't run. The rest of the kit (anti-sycophancy, diagnostic mode, response-shape rules) still works without it.
+
 ## How the rules work
 
 ### Constraint format
@@ -77,6 +87,7 @@ For local-only tuning (changes you don't want in the kit), edit the deployed fil
 - **Compliance is best-effort.** Research ceiling on prompt-based behavioral compliance is ~60-79% on hard tasks. For destructive actions, rely on Cowork's built-in deletion permission prompt, not these rules.
 - **Hooks aren't reliable in Cowork** (anthropics/claude-code issues #27398 and #40495). Hooks would be the right mechanism for guaranteed re-injection of spine rules at trigger points; treat self-checkpoint prompts as soft reminders until those bugs close.
 - **Persona drift** degrades self-consistency by 30%+ after 8-12 turns per arxiv 2402.10962. Long sessions weaken the sparring-partner framing.
+- **Humanizer skill dependency.** If it's not installed (see Prerequisites), the voice-rule pass silently won't run. Install via your environment's plugin/skill manager before relying on the voice rules.
 
 ## Why this isn't merged into claurke-memory-kit
 

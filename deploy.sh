@@ -120,6 +120,49 @@ done
 SHA=$(git -C "$SCRIPT_DIR" rev-parse --short HEAD 2>/dev/null || echo 'unknown')
 echo "$(date +%Y-%m-%d) $SHA" > "$TARGET_DIR/.claurke-rules-kit"
 
+# --- Humanizer skill prerequisite check ---
+echo ""
+print_step "Checking humanizer skill prerequisite..."
+
+HUMANIZER_PATHS=(
+  "$HOME/.claude/skills/humanizer"
+  "$HOME/.claude/plugins/anthropic-skills/skills/humanizer"
+  "$HOME/.claude/plugins/cache/anthropic-skills"
+  "$HOME/Library/Application Support/Claude/skills/humanizer"
+)
+
+HUMANIZER_FOUND=false
+FOUND_AT=""
+for p in "${HUMANIZER_PATHS[@]}"; do
+  if [ -d "$p" ] || [ -e "$p" ]; then
+    HUMANIZER_FOUND=true
+    FOUND_AT="$p"
+    break
+  fi
+done
+
+if [ "$HUMANIZER_FOUND" = true ]; then
+  print_ok "humanizer detected at $FOUND_AT"
+else
+  print_warn "humanizer skill not detected at standard paths."
+  echo ""
+  echo "  The Voice rule in CLAUDE.md requires the humanizer skill."
+  echo "  Without it installed, the voice-rule pass silently won't run."
+  echo ""
+  echo "  To install:"
+  echo "    Cowork:      open Settings > Plugins, install the Anthropic Skills bundle"
+  echo "    Claude Code: claude plugin install anthropic-skills"
+  echo "                 (or place the skill at ~/.claude/skills/humanizer/)"
+  echo ""
+  echo "  Detection paths checked:"
+  for p in "${HUMANIZER_PATHS[@]}"; do
+    echo "    - $p"
+  done
+  echo ""
+  echo "  If you've installed humanizer at a non-standard path, the kit still works;"
+  echo "  this is just a heads-up that detection couldn't confirm it."
+fi
+
 echo ""
 echo "========================"
 echo -e "${GREEN}Deploy complete${NC}"

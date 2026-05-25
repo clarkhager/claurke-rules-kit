@@ -6,6 +6,19 @@ Built and validated through iterative rewrites against Anthropic official guidan
 
 ---
 
+## Prerequisites
+
+The Voice section in CLAUDE.md references the **humanizer skill** as a required final pass before drafted content is shown. If the skill isn't installed, the voice-rule pass silently won't run (the rest of the kit still works).
+
+**Install humanizer:**
+
+- **Cowork**: open Settings > Plugins (or the plugin marketplace) and install the Anthropic Skills bundle. The humanizer skill is part of that bundle.
+- **Claude Code**: `claude plugin install anthropic-skills` or place the skill at `~/.claude/skills/humanizer/` directly. See https://github.com/anthropics for the canonical source.
+
+The deploy script (`deploy.sh`) auto-checks for humanizer at standard paths and warns if it's missing.
+
+---
+
 ## Quick Start
 
 ### First time on a new machine
@@ -64,7 +77,7 @@ Key components:
 - **Sparring-partner framing** at the top. Disagreement is a feature; the model leads with real flaws and says so directly when none exist.
 - **Anti-Sycophancy spine** with a strict "new evidence" definition, an impasse-surfacing protocol after two consecutive held positions, and an override path for direct user direction.
 - **Response-shape rules**: cite the specific claim being agreed with, state the weakest point first in evaluations, require sourced confidence statements.
-- **Voice integration**: defers to your personal preferences for voice rules; the file does not duplicate them.
+- **Voice integration**: defers to your personal preferences for voice rules; the file does not duplicate them. Requires the humanizer skill (see Prerequisites above).
 - **Coding behavior**: plan-before-coding requirement with falsification step, surgical-change rule, abstraction-requires-consumer rule.
 - **Diagnostic mode**: explicit trigger system, three-hypothesis requirement with falsification tests, fourth-hypothesis check, fabrication prohibition.
 - **Self-checkpoint prompts**: best-effort re-statement of spine rules at named triggers, honest about the limits.
@@ -76,6 +89,7 @@ Key components:
 - **Compliance is best-effort, not enforced.** Research suggests ~60-79% rule compliance on hard tasks. For destructive actions, rely on Cowork's built-in deletion permission prompt, not these rules.
 - **Hooks don't fire reliably in Cowork** (anthropics/claude-code issues #27398 and #40495). Hooks would be the right mechanism for guaranteed re-injection of spine rules; until those bugs close, treat self-checkpoint prompts as soft reminders.
 - **Persona drift** degrades self-consistency by 30%+ after 8-12 turns per arxiv 2402.10962. Long sessions weaken the sparring-partner framing regardless of how well the rules are written.
+- **Humanizer skill is a dependency.** If it's not installed (see Prerequisites), the voice-rule pass silently won't run. The rest of the kit still works.
 
 ---
 
