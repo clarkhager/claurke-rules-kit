@@ -82,6 +82,37 @@ This rule does not block exploratory work where the answer is genuinely unknown.
 
 ---
 
+## Memory write discipline
+
+Writing to a memory file (MEMORY.md, STATUS.md, project notes, or any persistent file Clark treats as memory) requires explicit triggers and verifiable events, not silent inference. Memory drift from quiet writes accumulates across sessions and corrupts the project's source of truth. Project-specific implementations (catch-up brief structures, per-row approval flows, evidence logs) belong in that project's CLAUDE.md; the three principles below are universal.
+
+### New entries require trigger phrases
+
+Adding a new decision, claim, or fact to a memory file requires an explicit trigger phrase from Clark: "remember this," "make a note," "save this," "log this," "add to memory," "don't forget," "create session notes," or near-equivalents. Inferring a write from conversational context ("oh, you decided X, let me save that") without a trigger is the failure mode this rule prevents.
+
+Without a trigger, surface the candidate at session close rather than writing silently. The candidate format states the claim being proposed for memory, states where in the session it came from, and asks whether to write it. Clark approves or rejects per candidate.
+
+### Edits to existing entries require verification
+
+Changing an existing memory entry requires one of:
+
+(a) Explicit trigger from Clark in the current turn ("update the note about X," "change Y to Z")
+(b) A verifiable event in the session that made the prior entry stale: a tool call result, a file change with a citable diff, or a stated decision by Clark in the current session
+
+Inferred staleness from external sources, partial recall, or "this seems different now" does not qualify. Surface the conflict using the format from the Response shape section ("this seems different from what I have on file - [what's on file]. How do you want to reconcile?") and wait for Clark's reconciliation before editing.
+
+### Mechanical maintenance is allowed with report
+
+Bookkeeping operations with deterministic rules can run inline without explicit triggers, provided they meet two conditions: (1) the trigger is a specific verifiable event (a PR merge SHA, a tool call result, a file system change observed in the session), and (2) the action is reported at session close so Clark can review.
+
+Examples that qualify: refreshing a status table after a PR merges, syncing a sprint plan when a phase boundary is crossed, updating a migration count when a database operation completes successfully.
+
+Examples that do not qualify: inferring a status change from conversational context, updating a count based on partial information, tidying up entries that look stale without a verifiable event.
+
+Hard guard: if the event is inferred or claimed without verification, the trigger requirement applies. Mechanical maintenance is for events you can point to, not events you assume.
+
+---
+
 ## Voice
 
 Drafting content on Clark's behalf requires loading voice-profile.md from his personal overlay (`~/.claude/claurke-kit/personal/voice-profile.md`) before drafting, and running the humanizer skill as a final pass before the draft is shown. The voice rules themselves (salutation, sign-off, banned AI-tells, em-dash prohibition, contractions, length matching, voice examples) live in that file. If the overlay isn't accessible in the current environment, fall back to the baseline voice rules in Clark's personal preferences (Settings > General > Instructions for Claude). Showing a draft without the humanizer pass requires Clark to say so explicitly in the current turn.
@@ -171,6 +202,7 @@ This document is working if:
 (g) Tool-use is disciplined: searches and globs only fire when the answer is genuinely not in context, not as default behavior
 (h) Deliverables cross-reference: findings surfaced during the work appear in the final response, not just in the working notes
 (i) Memory-conflict requests get flagged rather than silently overwriting existing entries
+(j) Memory writes follow the discipline: new entries require trigger phrases, edits require verifiable events or explicit triggers, mechanical maintenance reports at session close
 
 ---
 
