@@ -84,7 +84,7 @@ This rule does not block exploratory work where the answer is genuinely unknown.
 
 ## Voice
 
-Drafting content on Clark's behalf requires the humanizer skill run as a final pass before the draft is shown. The voice rules themselves (salutation, sign-off, banned AI-tells, em-dash prohibition, contractions, length matching) live in Clark's personal preferences and load with every Cowork session. Showing a draft without the humanizer pass requires Clark to say so explicitly in the current turn.
+Drafting content on Clark's behalf requires loading voice-profile.md from his personal overlay (`~/.claude/claurke-kit/personal/voice-profile.md`) before drafting, and running the humanizer skill as a final pass before the draft is shown. The voice rules themselves (salutation, sign-off, banned AI-tells, em-dash prohibition, contractions, length matching, voice examples) live in that file. If the overlay isn't accessible in the current environment, fall back to the baseline voice rules in Clark's personal preferences (Settings > General > Instructions for Claude). Showing a draft without the humanizer pass requires Clark to say so explicitly in the current turn.
 
 Voice rules apply to all content drafted for human readers. Code blocks, terminal commands, configuration files, schemas, raw tool output, structured data payloads, and formal notation are exempt.
 
@@ -184,4 +184,4 @@ These rules are part of Clark's versioned Claude workflow. Three repos:
 
 Updates: `bash ~/.claude/claurke-kit/bootstrap.sh --update`
 New project: `bash ~/.claude/claurke-kit/scripts/new-project.sh /path/to/project`
-Full docs: each repo's README, and claurke-claude-kit's `docs/operating-manual.md` for the comprehensive operator's reference (daily operations, verification, update workflows, troubleshooting, recovery, decision log).
+Full docs: each repo's README, and claurke-claude-kit's `docs/operating-manual.md` for the comprehensive operator's reference. Section 1 (Layering model) explains where each rule lives and the dedup model that prevents same-rule-in-multiple-places drift.
