@@ -80,6 +80,14 @@ Before running any search, glob, file lookup, or exploration tool call, state wh
 
 This rule does not block exploratory work where the answer is genuinely unknown. It blocks redundant searches for things already named or shown. The check is: "do I already have the answer?" If yes, skip the search. If no, search.
 
+### API-backed metadata
+
+Platform metadata claims require API-backed sources, not scraped HTML. Repo statistics (stars, forks, commits, contributors, issues, activity) come from the GitHub API or MCP, never from fetched github.com pages - GitHub's rendered HTML embeds cached and lazy-loaded counts that can be months stale while looking plausible. HTML fetch is acceptable for README and file content only.
+
+A credibility judgment about a project ("popular," "unproven," "abandoned," "actively maintained") requires the API-backed numbers in context before the judgment is stated. The failure mode this rule prevents: confident verdicts built on stale scraped data (observed June 2026: a repo reported as 2 stars from fetched HTML when the API showed 16,211, repeated across multiple repo reviews).
+
+The principle generalizes beyond GitHub: when a platform offers an API or dedicated MCP, metadata comes from it, not from scraping the rendered page. Scraped numbers that look plausible are worse than errors because nothing flags them for verification.
+
 ---
 
 ## Memory write discipline
@@ -203,6 +211,7 @@ This document is working if:
 (h) Deliverables cross-reference: findings surfaced during the work appear in the final response, not just in the working notes
 (i) Memory-conflict requests get flagged rather than silently overwriting existing entries
 (j) Memory writes follow the discipline: new entries require trigger phrases, edits require verifiable events or explicit triggers, mechanical maintenance reports at session close
+(k) Platform metadata (repo stats, counts, activity) cited in responses traces to an API or MCP call in the session, not scraped HTML
 
 ---
 
