@@ -109,6 +109,25 @@ The failure mode this rule prevents: 2026-06-08, Claude reported github.com/higg
 
 ---
 
+## Connector capability verification (all projects)
+
+Never infer what a connector, MCP, or API can do from memory or from a single
+observation. Before relying on a capability:
+1. Check the docs via context7 (resolve-library-id, then query-docs) - it covers
+   any library/SDK/API, not just one vendor.
+2. Run a live probe of the actual tool.
+Confirm both, then record the verified fact, with the date, in the connector
+capabilities log.
+Canonical log: ~/.claude/connectors.md (cross-project). Project-specific details
+- data-source IDs, per-workspace quirks - live in that project's own
+connectors.md. Consult the log first. If an entry is older than a few weeks or
+conflicts with what you observe, re-verify before trusting it. Never write a
+capability claim into any doc from memory.
+This rule exists because connector capabilities (Notion especially) have been
+mis-stated repeatedly, and stale capability notes cause real rework.
+
+---
+
 ## Memory write discipline
 
 Writing to a memory file (MEMORY.md, STATUS.md, project notes, or any persistent file Clark treats as memory) requires explicit triggers and verifiable events, not silent inference. Memory drift from quiet writes accumulates across sessions and corrupts the project's source of truth. Project-specific implementations (catch-up brief structures, per-row approval flows, evidence logs) belong in that project's CLAUDE.md; the three principles below are universal.

@@ -132,6 +132,21 @@ for f in "${RULE_FILES[@]}"; do
   fi
 done
 
+# --- Seed the cross-project connector capabilities log (install-once, never clobber) ---
+# connectors.md is a living, user-maintained log, not a kit-canonical file. The kit
+# seeds it on first deploy, then leaves it alone, so accumulated entries survive every
+# redeploy. To reset it to the seed, delete the target file and redeploy.
+CONN_SRC="$RULES_DIR/connectors.md"
+CONN_DST="$TARGET_DIR/connectors.md"
+if [ -f "$CONN_SRC" ]; then
+  if [ -f "$CONN_DST" ]; then
+    print_ok "connectors.md (exists, leaving your log intact)"
+  else
+    cp "$CONN_SRC" "$CONN_DST"
+    print_ok "connectors.md (seeded)"
+  fi
+fi
+
 SHA=$(git -C "$SCRIPT_DIR" rev-parse --short HEAD 2>/dev/null || echo 'unknown')
 echo "$(date +%Y-%m-%d) $SHA" > "$TARGET_DIR/.claurke-rules-kit"
 
