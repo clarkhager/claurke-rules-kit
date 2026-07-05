@@ -263,6 +263,29 @@ When diagnostic mode activates, read claude_diagnostic_mode.md before producing 
 
 ---
 
+## Model-usage policy (universal core)
+
+Adopted 2026-07-04 after a 4-round adversarial Codex review (transcript: The Wherehouse `PLAN-REVIEW-LOG.md`). Each project's CLAUDE.md carries the concrete instance — its tripwire surface list and canon verification gates. The project file wins locally; this core updates only after local adoption, and divergences are logged.
+
+- **Classify first, then default.** The default executor (currently Fable, effort high) drives everything non-mechanical, but only AFTER classification. Routing precedence: tripwired/canon > plan/architecture/diagnosis > consequential long loop > routine. Plan/execution split: PLANNING a canon/tripwired change uses the plan row with the plan review BLOCKING; IMPLEMENTING on those surfaces uses the canon row with artifact-keyed verification. Reclassify mid-task the moment a tripwire surface appears, a prediction is falsified, or scope crosses repos.
+- **Executor ladder:** workhorse-tier for routine/mechanical/fan-out work (currently Sonnet 5, Haiku workers) -> senior workhorse for consequential long loops with external verification (currently Opus 4.8) -> frontier reasoner for hard problems, canon surfaces, and diagnosis, driving directly (currently Fable). The senior workhorse is also a valid advisor and the frontier-unavailable fallback — fallback fires ONLY when the frontier model is unavailable or hard-blocked, the reason is named at kickoff, and every gate still applies.
+- **Row boundary (consequential long loop):** any of — multi-file behavioral change, cross-repo change, ships a deployable artifact, mutates data, user-visible workflow change, or touches an external API/platform contract. None of these is ever "routine." This row requires a NAMED external check at kickoff; if none exists, classify as plan/diagnosis until one is designed, or escalate if risk warrants.
+- **Tripwire principle:** any surface that can break deploy, auth, data retention, backup/restore, network reachability, or production availability reclassifies to the canon row immediately. Each project's CLAUDE.md holds its concrete surface list.
+- **Advisor != cross-provider review != verification.** An advisor is intra-provider and in-loop; cross-provider review (Codex) is an independent second model; NEITHER substitutes for verification gates (acceptance tests as the real role, live-driving the deployed artifact, real external state — mocks alone never qualify). Reviewer approval never stands in for verification. Blocked gate (missing credentials/tools): name the missing access, do every observable substitute, hand over the exact command — the work cannot be merged, deployed, or called complete unless Clark explicitly accepts the blocked state.
+- **Cross-provider review (Codex) posture:** default-ON except behaviorally INERT edits (a rename, a version bump, cosmetic wording — standing rules, runbooks, migration/security/deploy docs are never "cosmetic"; when in doubt, include). Two-tier verdicts: BLOCKING on canon/security rows (independent review must reach APPROVED; on a hang past the sanity-ping + 10-min time-box, a fresh-context subagent verifier satisfies the gate and the hang is logged); advisory elsewhere (address, or dismiss with a logged non-applicability reason or counter-receipt; dismissed HIGH-severity findings are risk-acceptance items requiring Clark's acceptance before merge/deploy/complete). Highest-stakes canon nodes run BOTH the cross-provider review and the subagent. **Codex runs on Clark's flat-rate ChatGPT subscription and is NEVER Rule-22-gated spend; only incremental metered API/compute triggers the spend rule.**
+- **Advisor-trial mechanism (general):** any advisor arm runs as a bounded trial against a no-advisor comparator on matched tasks; metrics are qualitative operational evidence (per-task one-line log: classification, checkpoints hit, defects found per gate, would-it-have-escaped), consulted at FIXED checkpoints, reviewed after ~10 tasks or 2 weeks. Checkpoints skipped = process failure (fix enforcement, restart the window), not a free exit; advisor adding nothing at fired checkpoints, or escapes worsening = exit.
+- **Effort semantics:** the highest effort tiers are keyed to risk + ambiguity, not prompt size; observation-first diagnostics come before treating higher effort as the fix.
+- **Rot guard:** model names are aliases for capability roles; re-check the matrix whenever the model catalog or pricing changes, AND on a light cadence (first session after the 1st of each month). If a default model becomes dollar-metered, the no-spend-without-a-dollar-figure rule applies to ALL metered usage — the frontier model stays PREFERRED on canon/diagnosis, but metered use needs a standing budget or per-run authorization; no carve-outs.
+- **Fan-out guard:** worker models inspect, summarize, and draft in isolation; final edits, merges, deploys, and verification stay with the executor.
+
+---
+
+## Tool curation
+
+A skill, MCP server, or connector earns its place only if it maps to a rules-trigger or a named workflow it serves. A newly-installed tool gets a short grace window (~2 weeks) to earn its mapping. The audit hooks onto the weekly review / session-close. Unmapped after grace = an uninstall candidate surfaced to Clark — never a silent removal.
+
+---
+
 ## System reference
 
 These rules are part of Clark's versioned Claude workflow. Three repos:
