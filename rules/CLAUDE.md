@@ -284,6 +284,8 @@ Adopted 2026-07-04 after a 4-round adversarial Codex review (transcript: The Whe
 
 A skill, MCP server, or connector earns its place only if it maps to a rules-trigger or a named workflow it serves. A newly-installed tool gets a short grace window (~2 weeks) to earn its mapping. The audit hooks onto the weekly review / session-close. Unmapped after grace = an uninstall candidate surfaced to Clark — never a silent removal.
 
+**Browser tool selection:** Claude has its own browser now — prefer it. (a) chrome-devtools (isolated/headless): default for independent verification, live-driving deployed apps, and public + tailnet pages with deep console/network. (b) chrome-devtools-auth (headed, persistent --userDataDir): tasks needing a logged-in session (company SSO) — log in once, reuse. (c) Claude-in-Chrome: FALLBACK only — when acting in Clark's real logged-in Chrome is specifically required, or he wants to watch/collaborate live; its role narrows from "the only web access" to this. (d) computer-use: pixel-level last resort for native apps. (Chosen via the browser-tool bake-off — MEMORY #83.)
+
 ---
 
 ## System reference
