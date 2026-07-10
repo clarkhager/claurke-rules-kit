@@ -150,7 +150,7 @@ mis-stated repeatedly, and stale capability notes cause real rework.
 
 ## Memory write discipline
 
-Writing to a memory file (MEMORY.md, STATUS.md, project notes, or any persistent file Clark treats as memory) requires explicit triggers and verifiable events, not silent inference. Memory drift from quiet writes accumulates across sessions and corrupts the project's source of truth. Project-specific implementations (catch-up brief structures, per-row approval flows, evidence logs) belong in that project's CLAUDE.md; the three principles below are universal.
+Writing to a memory file (MEMORY.md, STATUS.md, project notes, or any persistent file Clark treats as memory) requires explicit triggers and verifiable events, not silent inference. Memory drift from quiet writes accumulates across sessions and corrupts the project's source of truth. Project-specific implementations (catch-up brief structures, per-row approval flows, evidence logs) belong in that project's CLAUDE.md; the principles below are universal.
 
 ### New entries require trigger phrases
 
@@ -167,6 +167,20 @@ Changing an existing memory entry requires one of:
 
 Inferred staleness from external sources, partial recall, or "this seems different now" does not qualify. Surface the conflict using the format from the Response shape section, and wait for Clark's reconciliation before editing.
 
+### Supersession-at-write (Category 2 extension — the append-never-retire fix)
+
+Writing any entry that changes the answer of an existing entry REQUIRES marking that entry Superseded (one-line tombstone + pointer) in the same write. The new entry is itself the verifiable event — no separate trigger needed. An append that silently contradicts an older entry is a protocol violation, not a style issue.
+
+**Transitive supersession:** a tombstone or supersession pointer MUST target the CURRENT head of the supersession chain, never a row that is itself superseded — verify the target is still active before writing the pointer.
+
+### One narrative per session
+
+The close writes exactly ONE narrative — the STATUS close block. MEMORY rows, headline lines, and the kickoff prompt cite it; they never restate it. "Last updated" headlines are capped at 2 lines everywhere; "Prior:" chains are deleted, not maintained (git history + the archives own the past).
+
+### Entry budgets
+
+MEMORY rows are ≤3 lines; detail lives in the cited brief or close-block. Gotchas are written as a one-liner (CLAUDE.md) + narrative (GOTCHAS.md) pair in one motion. A gotcha whose canonical home is another repo gets the one-liner THERE and at most a pointer here (gotchas are permanent records *in their canonical repo*).
+
 ### Mechanical maintenance is allowed with report
 
 Bookkeeping operations with deterministic rules can run inline without explicit triggers, provided they meet two conditions: (1) the trigger is a specific verifiable event (a PR merge SHA, a tool call result, a file system change observed in the session), and (2) the action is reported at session close so Clark can review.
@@ -176,6 +190,8 @@ Examples that qualify: refreshing a status table after a PR merges, syncing a sp
 Examples that do not qualify: inferring a status change from conversational context, updating a count based on partial information, tidying up entries that look stale without a verifiable event.
 
 Hard guard: if the event is inferred or claimed without verification, the trigger requirement applies. Mechanical maintenance is for events you can point to, not events you assume.
+
+**Mandatory at every session close, no interview option:** STATUS prune to ≤3 blocks; size-tripwire check (CLAUDE >2,500w / STATUS >2,500w post-first-prune / MEMORY >4,500w → surface the prune candidate in the close report); brief Status-line flips on shipped builds. Category 3's two conditions (verifiable event, reported at close) are unchanged — these all key off observable file state.
 
 ---
 
