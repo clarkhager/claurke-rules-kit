@@ -150,7 +150,7 @@ mis-stated repeatedly, and stale capability notes cause real rework.
 
 ## Memory write discipline
 
-Writing to a memory file (MEMORY.md, STATUS.md, project notes, or any persistent file Clark treats as memory) requires explicit triggers and verifiable events, not silent inference. Memory drift from quiet writes accumulates across sessions and corrupts the project's source of truth. Project-specific implementations (catch-up brief structures, per-row approval flows, evidence logs) belong in that project's CLAUDE.md; the principles below are universal. (Amendments adopted 2026-07-10 per JAD-93 §6.1: supersession-at-write, one-narrative-per-session, entry budgets, mandatory Category-3 close maintenance.)
+Writing to a memory file (MEMORY.md, STATUS.md, project notes, or any persistent file Clark treats as memory) requires explicit triggers and verifiable events, not silent inference. Memory drift from quiet writes accumulates across sessions and corrupts the project's source of truth. Project-specific implementations (catch-up brief structures, per-row approval flows, evidence logs) belong in that project's CLAUDE.md; the principles below are universal.
 
 ### New entries require trigger phrases
 
@@ -171,7 +171,7 @@ Inferred staleness from external sources, partial recall, or "this seems differe
 
 Writing any entry that changes the answer of an existing entry REQUIRES marking that entry Superseded (one-line tombstone + pointer) in the same write. The new entry is itself the verifiable event — no separate trigger needed. An append that silently contradicts an older entry is a protocol violation, not a style issue.
 
-**Transitive supersession:** a tombstone or supersession pointer MUST target the CURRENT head of the supersession chain, never a row that is itself superseded — verify the target is still active before writing the pointer. (Logged from the JAD-93 M4 #7 catch: a pointer aimed at an already-superseded row silently forks the chain.)
+**Transitive supersession:** a tombstone or supersession pointer MUST target the CURRENT head of the supersession chain, never a row that is itself superseded — verify the target is still active before writing the pointer.
 
 ### One narrative per session
 
@@ -191,7 +191,7 @@ Examples that do not qualify: inferring a status change from conversational cont
 
 Hard guard: if the event is inferred or claimed without verification, the trigger requirement applies. Mechanical maintenance is for events you can point to, not events you assume.
 
-**Mandatory at every session close, no interview option:** STATUS prune to ≤3 blocks; size-tripwire check (defaults: CLAUDE >2,500w / STATUS >2,500w post-first-prune / MEMORY >4,500w → surface the prune candidate in the close report; a project's declared per-file budgets override these defaults); brief Status-line flips on shipped builds. Category 3's two conditions (verifiable event, reported at close) are unchanged — these all key off observable file state.
+**Mandatory at every session close, no interview option:** STATUS prune to ≤3 blocks; size-tripwire check (CLAUDE >2,500w / STATUS >2,500w post-first-prune / MEMORY >4,500w → surface the prune candidate in the close report); brief Status-line flips on shipped builds. Category 3's two conditions (verifiable event, reported at close) are unchanged — these all key off observable file state.
 
 ---
 
