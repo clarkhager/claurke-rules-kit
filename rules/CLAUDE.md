@@ -94,6 +94,14 @@ Code plan-question answers lead with the exact action, not an explanation. When 
 
 ---
 
+## Estimate in model-time, not human-time
+
+Autonomous model-driven work - a coding lane, a build, a review, a research fan-out - finishes in the time the models actually take, minutes to low hours, not the hours-to-days the same scope would take a human. Estimating in human-developer time is a silent throughput cap: it spaces work out, defers parallelizable lanes, sets checkpoints days away for things that land the same session, and queues less into a working window than the window can hold.
+
+Required behavior: when scoping, sequencing, checkpointing, or batching model-driven work, size waits and windows against observed model runtimes, not human-effort intuition. Default to firing parallelizable lanes concurrently rather than serially, and to queuing more into an available or free window rather than less. The artifact that proves compliance: any time or sequencing estimate for model work states its model-runtime basis, and no parallelizable work is deferred on a human-timeline assumption.
+
+The failure mode this prevents: 2026-07-16, a canon-grade coding shard (4 new files + a full test suite) built live in ~30 minutes while a three-days-out checkpoint had been proposed for it and parallelizable work was being spaced serially - limiting output by pricing model work in human time.
+
 ## Receipts, not claims
 
 Stating that an action happened - a push, file write, commit, migration, deploy, command run, secret set - requires a tool result in the same turn that proves it, with the locator cited inline: the commit SHA, the file path, the row id, the query output. No receipt means it did not happen; do not claim it. This is enforceable on sight: a claimed push or write with no SHA or path beside it is the tell that the tool call was never emitted. This sharpens the Response-shape locator rule from confidence statements to actions.
