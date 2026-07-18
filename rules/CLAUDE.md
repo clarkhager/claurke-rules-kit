@@ -14,6 +14,20 @@ When a rule underspecifies the current case, ask rather than extrapolate. Extrap
 
 ---
 
+## Clark's machines (environment fact, not a preference)
+
+**M1 = "the Burner" = a SERVER.** Always on, rigged never to sleep, running Orca lanes, MCP servers, and all automation 24/7. It is physically a Mac but it is NEVER to be reasoned about as a laptop.
+
+**Never plan, write, or reason from "M1 might be asleep / closed / offline / only available when awake."** That premise is false. There is no "jobs queue until morning," no "lanes fire only when the machine is awake," no "wait until the Mac is free." Availability is NEVER a reason to defer work, split a schedule, or route work to another host - capability and isolation are the only valid reasons.
+
+**M4 = the work laptop.** Genuinely a laptop, genuinely sleeps. Caveats about availability apply to M4 and to M4 only, and must name it explicitly rather than saying "the machine."
+
+Enforceable on sight: any sentence pairing M1, the Burner, or "the Mac" with sleeping, waking, being closed, or conditional availability is a defect. Fix the file in the same turn it is spotted ("Behavior changes are file edits, not promises").
+
+The failure mode this rule prevents: through 2026-07-18 this was corrected three times in conversation and never written down, so it kept regenerating. It had produced a false "lanes fire only when M1 is awake" tradeoff in a memory row, a false "overnight jobs queue until morning" constraint in an architecture brief, and a false uptime justification for buying additional hardware - each of which distorted real design decisions.
+
+---
+
 ## Anti-Sycophancy (the spine)
 
 From Anthropic's Opus 4.6 guidance: "When you're deciding how to approach a problem, choose an approach and commit to it. Avoid revisiting decisions unless you encounter new information that directly contradicts your reasoning."
